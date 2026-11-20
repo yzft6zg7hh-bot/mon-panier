@@ -1,84 +1,19 @@
-<!doctype html>
-<html lang="fr">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#176b45">
-<link rel="manifest" href="manifest.webmanifest">
-<title>Mon Panier</title>
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#176b45"><link rel="manifest" href="manifest.webmanifest"><title>Mon Panier</title>
 <style>
-:root{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#18251e;background:#f3f6f3}
-*{box-sizing:border-box}body{margin:0;padding:env(safe-area-inset-top) 14px env(safe-area-inset-bottom);max-width:560px;margin-inline:auto}
-header{padding:22px 6px 12px;display:flex;justify-content:space-between;align-items:center}
-h1{font-size:26px;margin:0} .sub{color:#637168;font-size:13px;margin-top:4px}
-.card{background:white;border-radius:20px;padding:18px;margin:10px 0;box-shadow:0 3px 14px #183c2410}
-.total{font-size:38px;font-weight:800;color:#176b45;letter-spacing:-1px;margin:3px 0}
-.small{font-size:13px;color:#68756d}.budgetline{height:9px;background:#e7eee9;border-radius:20px;overflow:hidden;margin:12px 0 7px}.fill{height:100%;width:0;background:#24965e;border-radius:20px}
-label{font-size:13px;color:#59675e;display:block;margin:0 0 6px}
-input{width:100%;border:1px solid #dce5de;border-radius:12px;padding:13px;font-size:17px;background:#fbfdfb;min-width:0}
-.fields{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
-button{border:0;border-radius:13px;padding:14px 16px;font-size:16px;font-weight:700;background:#176b45;color:white;width:100%}
-button.secondary{background:#edf4ef;color:#176b45}button.danger{background:#fff0ee;color:#b33d30;width:auto;padding:8px 11px;font-size:13px}
-.row{display:flex;align-items:center;justify-content:space-between;gap:10px}
-.item{padding:12px 0;border-bottom:1px solid #edf1ee}.item:last-child{border:0}
-.name{font-weight:650}.detail{font-size:13px;color:#718077;margin-top:3px}
-.price{font-weight:750;white-space:nowrap}
-.footer{font-size:12px;color:#7b877f;text-align:center;padding:16px}
-@media(max-width:360px){.fields{grid-template-columns:1fr}}
-</style>
-</head>
-<body>
-<header><div><h1>🛒 Mon Panier</h1><div class="sub">Le total de tes courses, en direct</div></div><button class="secondary" style="width:auto;padding:10px 12px" id="reset">Vider</button></header>
-<section class="card">
- <div class="small">TOTAL DU PANIER</div><div class="total" id="total">0,00 €</div>
- <div class="row small"><span id="count">0 article</span><span id="remaining">Budget non défini</span></div>
- <div class="budgetline"><div class="fill" id="fill"></div></div>
- <label for="budget">Mon budget (€)</label><input id="budget" type="number" min="0" step="0.01" placeholder="Ex. 100">
-</section>
-<section class="card">
- <h2 style="font-size:18px;margin:0 0 14px">Ajouter un article</h2>
- <label for="name">Nom (facultatif)</label><input id="name" placeholder="Ex. Lait">
- <div class="fields" style="margin-top:12px">
-  <div><label for="price">Prix unitaire (€)</label><input id="price" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0,00"></div>
-  <div><label for="qty">Quantité</label><input id="qty" type="number" min="1" step="1" inputmode="numeric" value="1"></div>
- </div>
- <button id="add">＋ Ajouter au panier</button>
-</section>
-<section class="card">
- <div class="row"><h2 style="font-size:18px;margin:0">Mes articles</h2><span class="small" id="itemsCount"></span></div>
- <div id="items" class="small" style="padding-top:8px">Ton panier est vide pour le moment.</div>
-</section>
-<div class="footer">Tes données restent enregistrées sur cet iPhone dans ce navigateur.</div>
+:root{font-family:-apple-system,BlinkMacSystemFont,sans-serif;color:#18251e;background:#f3f6f3}*{box-sizing:border-box}body{margin:0;padding:env(safe-area-inset-top) 14px env(safe-area-inset-bottom);max-width:560px;margin:auto}header,.row{display:flex;justify-content:space-between;align-items:center;gap:10px}header{padding:22px 6px 12px}h1{font-size:26px;margin:0}.sub,.small{color:#68756d;font-size:13px}.card{background:white;border-radius:20px;padding:18px;margin:10px 0;box-shadow:0 3px 14px #183c2410}.total{font-size:38px;font-weight:800;color:#176b45}.budgetline{height:9px;background:#e7eee9;border-radius:20px;overflow:hidden;margin:12px 0 7px}.fill{height:100%;background:#24965e}label{font-size:13px;color:#59675e;display:block;margin:0 0 6px}input{width:100%;border:1px solid #dce5de;border-radius:12px;padding:13px;font-size:17px;background:#fbfdfb;min-width:0}.fields{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}button{border:0;border-radius:13px;padding:14px 16px;font-size:16px;font-weight:700;background:#176b45;color:white;width:100%;margin-top:8px}button.secondary{background:#edf4ef;color:#176b45}button.danger{background:#fff0ee;color:#b33d30;width:auto;padding:8px 11px;font-size:13px}.item{padding:12px 0;border-bottom:1px solid #edf1ee}.name{font-weight:650}.detail{font-size:13px;color:#718077;margin-top:3px}.price{font-weight:750;white-space:nowrap}#scanPanel{display:none;margin-top:14px;padding:14px;background:#f5f8f5;border-radius:14px}#photo{display:none}#preview{width:100%;max-height:240px;object-fit:contain;border-radius:10px;display:none;margin:10px 0}.picks{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}.picks button{width:auto;padding:10px 14px;background:#e4f1e8;color:#145b3a}.footer{text-align:center;padding:16px;color:#7b877f;font-size:12px}@media(max-width:360px){.fields{grid-template-columns:1fr}}
+</style></head><body>
+<header><div><h1>🛒 Mon Panier</h1><div class="sub">Le total de tes courses, en direct</div></div><button class="secondary" style="width:auto" id="reset">Vider</button></header>
+<section class="card"><div class="small">TOTAL DU PANIER</div><div class="total" id="total">0,00 €</div><div class="row small"><span id="count">0 article</span><span id="remaining">Budget non défini</span></div><div class="budgetline"><div class="fill" id="fill" style="width:0"></div></div><label for="budget">Mon budget (€)</label><input id="budget" type="number" min="0" step=".01" placeholder="Ex. 100"></section>
+<section class="card"><h2 style="font-size:18px;margin:0 0 14px">Ajouter un article</h2><label for="name">Nom (facultatif)</label><input id="name" placeholder="Ex. Lait"><div class="fields"><div><label for="price">Prix unitaire (€)</label><input id="price" type="number" min="0" step=".01" inputmode="decimal" placeholder="0,00"></div><div><label for="qty">Quantité</label><input id="qty" type="number" min="1" step="1" inputmode="numeric" value="1"></div></div><button id="add">＋ Ajouter au panier</button><button class="secondary" id="openScan">📷 Photographier une étiquette de prix</button>
+<div id="scanPanel"><b>Photographie l'étiquette</b><p class="small">Cadre le prix nettement. Le montant reconnu doit être vérifié avant ajout.</p><input id="photo" type="file" accept="image/*" capture="environment"><button id="takePhoto">Ouvrir l'appareil photo</button><img id="preview" alt="Photo de l'étiquette"><div id="scanStatus" class="small">Une connexion Internet est nécessaire pour charger le moteur de reconnaissance.</div><div id="pricePicks" class="picks"></div><button class="secondary" id="closeScan">Fermer le scanner</button></div></section>
+<section class="card"><div class="row"><h2 style="font-size:18px;margin:0">Mes articles</h2><span class="small" id="itemsCount"></span></div><div id="items" class="small" style="padding-top:8px">Ton panier est vide pour le moment.</div></section><div class="footer">Tes données restent sur cet iPhone. Vérifie toujours le prix reconnu (prix de vente, et non prix au kilo).</div>
 <script>
-const $=id=>document.getElementById(id), euro=n=>n.toLocaleString('fr-FR',{style:'currency',currency:'EUR'});
-let items=[]; try{items=JSON.parse(localStorage.getItem('monPanierItems')||'[]')}catch(e){}
-$('budget').value=localStorage.getItem('monPanierBudget')||'';
+const $=id=>document.getElementById(id), euro=n=>n.toLocaleString('fr-FR',{style:'currency',currency:'EUR'});let items=[];try{items=JSON.parse(localStorage.getItem('monPanierItems')||'[]')}catch(e){}$('budget').value=localStorage.getItem('monPanierBudget')||'';
 function save(){localStorage.setItem('monPanierItems',JSON.stringify(items));localStorage.setItem('monPanierBudget',$('budget').value);render()}
-function render(){
- const total=items.reduce((s,x)=>s+x.price*x.qty,0), budget=Number($('budget').value)||0;
- $('total').textContent=euro(total);$('count').textContent=items.reduce((s,x)=>s+x.qty,0)+' article(s)';
- $('itemsCount').textContent=items.length+' ligne(s)';
- $('remaining').textContent=budget? (total<=budget?'Reste '+euro(budget-total):'Dépassement '+euro(total-budget)):'Budget non défini';
- $('fill').style.width=budget?Math.min(100,total/budget*100)+'%':'0%';
- $('fill').style.background=budget&&total>budget?'#d84d40':'#24965e';
- $('items').innerHTML=items.length?'':'Ton panier est vide pour le moment.';
- items.forEach((x,i)=>{const d=document.createElement('div');d.className='item row';
- const left=document.createElement('div');left.style.flex='1';
- const nm=document.createElement('div');nm.className='name';nm.textContent=x.name||'Article';
- const de=document.createElement('div');de.className='detail';de.textContent=x.qty+' × '+euro(x.price);
- left.append(nm,de);
- const right=document.createElement('div');right.className='row';
- const p=document.createElement('span');p.className='price';p.textContent=euro(x.price*x.qty);
- const b=document.createElement('button');b.className='danger';b.textContent='Retirer';b.onclick=()=>{items.splice(i,1);save()};
- right.append(p,b);d.append(left,right);$('items').append(d);
- });
-}
-$('add').onclick=()=>{const price=Number($('price').value),qty=Math.max(1,Math.floor(Number($('qty').value)||1));
- if(!$('price').value||!Number.isFinite(price)||price<0){$('price').focus();return}
- items.push({name:$('name').value.trim(),price,qty});$('name').value='';$('price').value='';$('qty').value='1';save();$('name').focus()};
-$('budget').oninput=save;
-$('reset').onclick=()=>{if(confirm('Vider tout le panier ?')){items=[];save()}};
-render();
-if('serviceWorker' in navigator && location.protocol.startsWith('http')) navigator.serviceWorker.register('./sw.js').catch(()=>{});
-</script>
-</body></html>
+function render(){let total=items.reduce((s,x)=>s+x.price*x.qty,0),budget=Number($('budget').value)||0;$('total').textContent=euro(total);$('count').textContent=items.reduce((s,x)=>s+x.qty,0)+' article(s)';$('itemsCount').textContent=items.length+' ligne(s)';$('remaining').textContent=budget?(total<=budget?'Reste '+euro(budget-total):'Dépassement '+euro(total-budget)):'Budget non défini';$('fill').style.width=budget?Math.min(100,total/budget*100)+'%':'0';$('fill').style.background=budget&&total>budget?'#d84d40':'#24965e';$('items').innerHTML='';if(!items.length)$('items').textContent='Ton panier est vide pour le moment.';items.forEach((x,i)=>{let d=document.createElement('div');d.className='item row';let l=document.createElement('div');l.style.flex='1';let n=document.createElement('div');n.className='name';n.textContent=x.name||'Article';let sub=document.createElement('div');sub.className='detail';sub.textContent=x.qty+' × '+euro(x.price);l.append(n,sub);let r=document.createElement('div');r.className='row';let p=document.createElement('span');p.className='price';p.textContent=euro(x.price*x.qty);let b=document.createElement('button');b.className='danger';b.textContent='Retirer';b.onclick=()=>{items.splice(i,1);save()};r.append(p,b);d.append(l,r);$('items').append(d)})}
+$('add').onclick=()=>{let price=Number($('price').value),qty=Math.max(1,Math.floor(Number($('qty').value)||1));if(!$('price').value||!Number.isFinite(price)||price<0){$('price').focus();return}items.push({name:$('name').value.trim(),price,qty});$('name').value='';$('price').value='';$('qty').value='1';save()};
+$('budget').oninput=save;$('reset').onclick=()=>{if(confirm('Vider tout le panier ?')){items=[];save()}};$('openScan').onclick=()=>{$('scanPanel').style.display='block';$('photo').click()};$('takePhoto').onclick=()=>$('photo').click();$('closeScan').onclick=()=>{$('scanPanel').style.display='none'};
+let loading;async function loadOCR(){if(window.Tesseract)return;if(!loading)loading=new Promise((ok,no)=>{let s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js';s.onload=ok;s.onerror=()=>no(Error('OCR indisponible. Vérifie ta connexion.'));document.head.append(s)});await loading}
+$('photo').onchange=async e=>{let f=e.target.files&&e.target.files[0];if(!f)return;$('preview').src=URL.createObjectURL(f);$('preview').style.display='block';$('pricePicks').innerHTML='';$('scanStatus').textContent='Lecture de l’étiquette…';try{await loadOCR();let res=await Tesseract.recognize(f,'fra+eng',{logger:m=>{if(m.status==='recognizing text')$('scanStatus').textContent='Reconnaissance… '+Math.round((m.progress||0)*100)+' %'}});let txt=(res.data.text||'').replace(/[€]/g,' ');let vals=[...new Set([...txt.matchAll(/\b\d{1,4}[,.]\d{2}\b/g)].map(m=>Number(m[0].replace(',','.'))).filter(n=>n>0&&n<10000))].sort((a,b)=>a-b);if(!vals.length){$('scanStatus').textContent='Aucun prix détecté. Essaie une photo plus nette ou saisis le prix.';return}$('scanStatus').textContent='Montants détectés : touche le bon prix après vérification.';vals.forEach(v=>{let b=document.createElement('button');b.textContent=euro(v);b.onclick=()=>{$('price').value=v.toFixed(2);$('scanStatus').textContent='Prix choisi : '+euro(v)+'. Vérifie qu’il s’agit bien du prix de vente, puis ajoute l’article.';$('price').scrollIntoView({behavior:'smooth',block:'center'})};$('pricePicks').append(b)})}catch(err){$('scanStatus').textContent=err.message||'Erreur OCR. Saisis le prix manuellement.'}};
+render();if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{});
+</script></body></html>
