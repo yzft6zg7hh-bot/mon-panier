@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#176b45">
+<link rel="manifest" href="manifest.webmanifest">
+<title>Mon Panier</title>
+<style>
+:root{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#18251e;background:#f3f6f3}
+*{box-sizing:border-box}body{margin:0;padding:env(safe-area-inset-top) 14px env(safe-area-inset-bottom);max-width:560px;margin-inline:auto}
+header{padding:22px 6px 12px;display:flex;justify-content:space-between;align-items:center}
+h1{font-size:26px;margin:0} .sub{color:#637168;font-size:13px;margin-top:4px}
+.card{background:white;border-radius:20px;padding:18px;margin:10px 0;box-shadow:0 3px 14px #183c2410}
+.total{font-size:38px;font-weight:800;color:#176b45;letter-spacing:-1px;margin:3px 0}
+.small{font-size:13px;color:#68756d}.budgetline{height:9px;background:#e7eee9;border-radius:20px;overflow:hidden;margin:12px 0 7px}.fill{height:100%;width:0;background:#24965e;border-radius:20px}
+label{font-size:13px;color:#59675e;display:block;margin:0 0 6px}
+input{width:100%;border:1px solid #dce5de;border-radius:12px;padding:13px;font-size:17px;background:#fbfdfb;min-width:0}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+button{border:0;border-radius:13px;padding:14px 16px;font-size:16px;font-weight:700;background:#176b45;color:white;width:100%}
+button.secondary{background:#edf4ef;color:#176b45}button.danger{background:#fff0ee;color:#b33d30;width:auto;padding:8px 11px;font-size:13px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.item{padding:12px 0;border-bottom:1px solid #edf1ee}.item:last-child{border:0}
+.name{font-weight:650}.detail{font-size:13px;color:#718077;margin-top:3px}
+.price{font-weight:750;white-space:nowrap}
+.footer{font-size:12px;color:#7b877f;text-align:center;padding:16px}
+@media(max-width:360px){.fields{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header><div><h1>🛒 Mon Panier</h1><div class="sub">Le total de tes courses, en direct</div></div><button class="secondary" style="width:auto;padding:10px 12px" id="reset">Vider</button></header>
+<section class="card">
+ <div class="small">TOTAL DU PANIER</div><div class="total" id="total">0,00 €</div>
+ <div class="row small"><span id="count">0 article</span><span id="remaining">Budget non défini</span></div>
+ <div class="budgetline"><div class="fill" id="fill"></div></div>
+ <label for="budget">Mon budget (€)</label><input id="budget" type="number" min="0" step="0.01" placeholder="Ex. 100">
+</section>
+<section class="card">
+ <h2 style="font-size:18px;margin:0 0 14px">Ajouter un article</h2>
+ <label for="name">Nom (facultatif)</label><input id="name" placeholder="Ex. Lait">
+ <div class="fields" style="margin-top:12px">
+  <div><label for="price">Prix unitaire (€)</label><input id="price" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0,00"></div>
+  <div><label for="qty">Quantité</label><input id="qty" type="number" min="1" step="1" inputmode="numeric" value="1"></div>
+ </div>
+ <button id="add">＋ Ajouter au panier</button>
+</section>
+<section class="card">
+ <div class="row"><h2 style="font-size:18px;margin:0">Mes articles</h2><span class="small" id="itemsCount"></span></div>
+ <div id="items" class="small" style="padding-top:8px">Ton panier est vide pour le moment.</div>
+</section>
+<div class="footer">Tes données restent enregistrées sur cet iPhone dans ce navigateur.</div>
+<script>
+const $=id=>document.getElementById(id), euro=n=>n.toLocaleString('fr-FR',{style:'currency',currency:'EUR'});
+let items=[]; try{items=JSON.parse(localStorage.getItem('monPanierItems')||'[]')}catch(e){}
+$('budget').value=localStorage.getItem('monPanierBudget')||'';
+function save(){localStorage.setItem('monPanierItems',JSON.stringify(items));localStorage.setItem('monPanierBudget',$('budget').value);render()}
+function render(){
+ const total=items.reduce((s,x)=>s+x.price*x.qty,0), budget=Number($('budget').value)||0;
+ $('total').textContent=euro(total);$('count').textContent=items.reduce((s,x)=>s+x.qty,0)+' article(s)';
+ $('itemsCount').textContent=items.length+' ligne(s)';
+ $('remaining').textContent=budget? (total<=budget?'Reste '+euro(budget-total):'Dépassement '+euro(total-budget)):'Budget non défini';
+ $('fill').style.width=budget?Math.min(100,total/budget*100)+'%':'0%';
+ $('fill').style.background=budget&&total>budget?'#d84d40':'#24965e';
+ $('items').innerHTML=items.length?'':'Ton panier est vide pour le moment.';
+ items.forEach((x,i)=>{const d=document.createElement('div');d.className='item row';
+ const left=document.createElement('div');left.style.flex='1';
+ const nm=document.createElement('div');nm.className='name';nm.textContent=x.name||'Article';
+ const de=document.createElement('div');de.className='detail';de.textContent=x.qty+' × '+euro(x.price);
+ left.append(nm,de);
+ const right=document.createElement('div');right.className='row';
+ const p=document.createElement('span');p.className='price';p.textContent=euro(x.price*x.qty);
+ const b=document.createElement('button');b.className='danger';b.textContent='Retirer';b.onclick=()=>{items.splice(i,1);save()};
+ right.append(p,b);d.append(left,right);$('items').append(d);
+ });
+}
+$('add').onclick=()=>{const price=Number($('price').value),qty=Math.max(1,Math.floor(Number($('qty').value)||1));
+ if(!$('price').value||!Number.isFinite(price)||price<0){$('price').focus();return}
+ items.push({name:$('name').value.trim(),price,qty});$('name').value='';$('price').value='';$('qty').value='1';save();$('name').focus()};
+$('budget').oninput=save;
+$('reset').onclick=()=>{if(confirm('Vider tout le panier ?')){items=[];save()}};
+render();
+if('serviceWorker' in navigator && location.protocol.startsWith('http')) navigator.serviceWorker.register('./sw.js').catch(()=>{});
+</script>
+</body></html>
